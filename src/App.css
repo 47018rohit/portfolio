@@ -1,106 +1,42 @@
-:root {
-  --yellow: #F5C32C;
-  --orange: #F2B705;
-  --black: #0C0C0D;
-  --gray: #788097;
-  --blueCard: #DDF8FE;
-  --purple: rgb(238 210 255);
-  --boxShadow: 0px 19px 60px rgb(0 0 0 / 8%);
-  --orangeCard: rgba(140, 92, 2, 0.421);
-  --purpleCard: #45499467;
-  --smboxShadow: -79px 51px 60px rgba(0, 0, 0, 0.08);
-  --nightPurple: #A904BF;
-  --nightPurpleGlow: #d839ed;
-  --nightBlue: #3E428C;
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
 }
 
-@font-face{
-  font-family: Gumela;
-  src: url('../src/fonts/Gumela\ Regular.otf');
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
 }
-*{
-  font-family: 'Gumela';
-  font-weight: normal;
-  font-size: 20px;
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
 }
-
-body::-webkit-scrollbar{
-  background-color: transparent;
-}
-body::-webkit-scrollbar-thumb{
-  background-color: #22222251;
-  border-radius: 5px;
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-.App {
-  padding: 0.5rem 3.5rem;
-  overflow: hidden;
-  color: var(--black);
-  transition: ease-in-out 300ms;
-}
-
-.button {
-  border: none;
-  border-radius: 32px;
-  font-size: 16px;
-  padding: 10px 20px;
-  transition: all ease 600ms;
-  color: white;
-}
-
-.button-light {
-  box-shadow: 0px 15px 20px 0px #f5c32cef;
-  background-image: linear-gradient(to bottom, #ffe085, #df931a);
-
-}
-
-.button-dark {
-  box-shadow: 0px 15px 20px 0px var(--nightPurpleGlow);
-  background-image: linear-gradient(to bottom, #e97af7, #740483);
-
-}
-
-.button:hover {
-  background-image: none;
-  cursor: pointer;
-}
-
-.button-light:hover {
-  background-color: white;
-  color: var(--orange);
-  border: 1px solid #df931a;
-}
-
-.button-dark:hover {
-  background-color: var(--black);
-  color: var(--nightPurple);
-  border: 1px solid var(--nightPurple);
-}
-
-.nav-container{
-  position: fixed;
-  z-index: 5;
-  margin: -0.5rem -3.5rem;
-  width: 100%;
-  padding: 0.5rem 3.5rem;
-  box-sizing: border-box;
-}
-
-.nav-light{
-  background-color: white;
-  color: var(--black);
-}
-.nav-dark{
-  background-color: var(--black);
-  color: white;
-}
-
-.navbar-scrolled{
-  background-color: var(--black);
-}
-
-@media screen and (max-width:480px) {
-  .App {
-    padding: 0.5rem 1rem;
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
   }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
 }
