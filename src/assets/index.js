@@ -27,6 +27,7 @@ import eagleview from "./company/eagleview.png";
 // import tesla from "./company/tesla.png";
 
 import carrent from "./carrent.png";
+import youtubeClone from './youtube-clone.png'
 import jobit from "./jobit.png";
 import tripguide from "./tripguide.png";
 
@@ -56,7 +57,7 @@ export {
   eagleview,
   // starbucks,
   // tesla,
-  carrent,
+  youtubeClone,
   jobit,
   tripguide,
 };
