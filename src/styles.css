@@ -13,3 +13,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.icon-plus {
+  background: black;
+  height: 100vh;
+  mask-image: var(--mask);
+  -webkit-mask-image: var(--mask);
+  mask-repeat: no-repeat;
+  mask-size: cover;
+  will-change: mask-image;
+}
