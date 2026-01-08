@@ -1,12 +1,16 @@
 @import "tailwindcss";
 
+
+
 body {
   @apply m-0;
+  /* background-color: blue; */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* cursor: ; */
 }
 
 code {
@@ -15,7 +19,7 @@ code {
 }
 
 .icon-plus {
-  background: black;
+  background-image: radial-gradient(#fc5000 , #bfeb58);
   height: 100vh;
   mask-image: var(--mask);
   -webkit-mask-image: var(--mask);

@@ -6,7 +6,6 @@ const PortfolioMain = () => {
     const stop = startBlobEngine({
       points: 200,
       baseRadius: 50,
-      maxRadius: 300
     });
 
     return stop;

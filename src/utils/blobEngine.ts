@@ -3,23 +3,24 @@ type BlobEngineOptions = {
   baseRadius?: number;
   maxRadius?: number;
   ease?: number;
-  wobble?: number;
 };
 
-type Blob = {
+type Particle = {
   angle: number;
   speed: number;
   size: number;
   phase: number;
-  depth: number; // 0 = center, 1 = outer edge
+  depth: number;
+  age: number;
+  life: number;
+  drift: number;
 };
 
 export function startBlobEngine({
-  points = 20,
+  points = 120,
   baseRadius = 10,
-  maxRadius = 140,
-  ease = 0.12,
-  wobble = 20
+  maxRadius = 160,
+  ease = 0.12
 }: BlobEngineOptions = {}) {
 
   let rafId: number;
@@ -35,14 +36,23 @@ export function startBlobEngine({
   let lastY = targetY;
   let velocity = 0;
 
-  // blob particles
-  const blobs: Array<Blob> = Array.from({ length: points }, (_, i) => ({
+  const noise = (t: number, seed: number) => Math.sin(t + seed) * 0.6 + Math.sin(t * .7 + seed) * 0.3 + Math.sin(t * 1.3 + seed) * 0.1
+
+  const spawn = (): Particle => ({
     angle: Math.random() * Math.PI * 2,
     speed: 0.002 + Math.random() * 0.002,
-    size: Math.random() * 20+ Math.random() * 2,
+    size: 1 + Math.random() * 2,        // dust starts tiny
     phase: Math.random() * Math.PI * 2,
-    depth: Math.pow(Math.random(), 1.8) // bias toward center
-  }));
+    depth: Math.pow(Math.random(), 1.6),
+    age: 0,
+    life: 120 + Math.random() * 120,    // frames
+    drift: 0.2 + Math.random() * 0.6    // upward smoke
+  });
+
+  const particles: Array<Particle> = Array.from(
+    { length: points },
+    spawn
+  );
 
   const handleMove = (e: MouseEvent) => {
     targetX = e.clientX;
@@ -60,60 +70,75 @@ export function startBlobEngine({
     currentX += (targetX - currentX) * ease;
     currentY += (targetY - currentY) * ease;
 
-    // velocity (distance per frame)
+    // velocity
     const dx = currentX - lastX;
     const dy = currentY - lastY;
-    velocity = Math.min(Math.hypot(dx, dy) * 4, maxRadius - baseRadius);
+    velocity = Math.min(Math.hypot(dx, dy) * 4, maxRadius);
 
     lastX = currentX;
     lastY = currentY;
 
-    const t = performance.now() * 0.001;
+    const time = performance.now() * 0.001;
 
-    const mask = blobs.map((b, i) => {
-      b.angle += b.speed;
+    const mask = particles.map(p => {
+      p.age++;
 
-      // radius reacts to velocity
-      const radius =
-        (baseRadius + velocity) * b.depth;
+      // respawn
+      if (p.age > p.life) {
+        Object.assign(p, spawn());
+      }
 
-      // organic wobble
-      const wobbleX = Math.sin(t * 2 + b.phase) * wobble;
-      const wobbleY = Math.cos(t * 2.3 + b.phase) * wobble;
+      const lifeRatio = p.age / p.life; // 0 → 1
+
+      // dust → smoke evolution
+      const base =
+        (baseRadius + velocity) *
+        p.depth *
+        (1 + lifeRatio * 0.6);
+
+      const organic =
+        1 + noise(time * 0.8, p.phase) * 0.3;
+
+      const radius = base * organic;
+
+      const size =
+        p.size + lifeRatio * 6; // grows into smoke
+
+      const fade =
+        1 - lifeRatio;
+
+      p.angle += p.speed;
+
+
+
+      const nx = noise(time * 2.5, p.phase)
+      const ny = noise(time * 2.5, p.phase + 10)
+
+      const wobbleX = nx * 8;
+      const wobbleY = ny * 8;
 
       const x =
         currentX +
-        Math.cos(b.angle + i) * radius +
+        Math.cos(p.angle) * radius +
         wobbleX;
 
       const y =
         currentY +
-        Math.sin(b.angle + i) * radius +
-        wobbleY;
+        Math.sin(p.angle) * radius +
+        wobbleY -
+        lifeRatio * 25 * p.drift; // smoke rises
 
       return `
         radial-gradient(
-          ${b.size}px ${b.size}px
+          ${size}px ${size}px
           at ${x}px ${y}px,
-          black 65%,
-          transparent 70%
+          rgba(0,0,0,${fade}) 60%,
+          transparent 75%
         )
       `;
     }).join(",");
 
-    const core = `
-      radial-gradient(
-        10px 10px
-        at ${currentX}px ${currentY}px,
-        black 80%,
-        transparent 90%
-      )
-    `;
-    const finalMask = core + "," + mask;
-
-    document.documentElement.style.setProperty("--mask", finalMask);
-    document.documentElement.style.setProperty("--x", `${currentX}px`);
-    document.documentElement.style.setProperty("--y", `${currentY}px`);
+    document.documentElement.style.setProperty("--mask", mask);
 
     rafId = requestAnimationFrame(animate);
   };
@@ -123,7 +148,6 @@ export function startBlobEngine({
 
   animate();
 
-  // cleanup
   return () => {
     cancelAnimationFrame(rafId);
     document.removeEventListener("mousemove", handleMove);
