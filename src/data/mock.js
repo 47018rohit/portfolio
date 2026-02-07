@@ -62,7 +62,7 @@ export const portfolioData = {
     {
       id: 1,
       name: "Fleet Tracking Microservice",
-      year: "2024",
+      year: "2025",
       description: "High-throughput service handling real-time GPS coordinates with zero-data loss during peak ingestion. Implemented consumer-group strategy in Kafka for fault-tolerant event processing.",
       impact: "Supports 1M+ daily events with sub-second latency",
       technologies: ["Node.js", "KafkaJS", "Redis", "PostgreSQL", "Docker"],

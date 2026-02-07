@@ -22,7 +22,7 @@ const Hero = () => {
             <div className="inline-block">
               <span className="text-cyan-400 font-mono text-sm tracking-wider">Hi, my name is</span>
             </div>
-            <h1 className="text-6xl lg:text-7xl font-bold text-white leading-tight">
+            <h1 className="text-6xl lg:text-7xl font-bold text-white leading-tight typewriter">
               {personal.name}
             </h1>
             <h2 className="text-4xl lg:text-5xl font-bold text-slate-400">
